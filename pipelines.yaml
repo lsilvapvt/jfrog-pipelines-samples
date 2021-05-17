@@ -1,0 +1,9 @@
+resources:
+- name: myGitRepo
+  type: GitRepo
+  configuration: 
+    gitProvider: githublsilvapvt
+    path: lsilvapvt/jfrog-pipelines-samples
+    branches:
+      includes: main
+  
