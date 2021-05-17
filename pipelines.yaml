@@ -39,11 +39,10 @@ pipelines:
 
   - name: redis_probe_pipeline
     steps:
-
       - name: build_go
         type: GoBuild
         configuration:
-          sourceLocation: .
+          sourceLocation: src/.
           resolverRepo: default-go
           noRegistry: true
           inputResources:
