@@ -3,6 +3,6 @@ resources:
   type: GitRepo
   configuration: 
     gitProvider: githublsilvapvt
-    path: lsilvapvt/jfrog-pipelines-samples.git
+    path: lsilvapvt/jfrog-pipelines-samples
     branches:
       include: main
