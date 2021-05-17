@@ -48,14 +48,14 @@ pipelines:
             - name: artifactorylucianos
         execution:
           onStart:
-            - ls -la workspace
             - pwd
-            # echo "echo Hello" > ./docker/redis-probe-linux
-            # - chmod 755 ./docker/redis-probe-linux
-            # - cat ./docker/redis-probe-linux
-          onComplete:
+            - echo "echo Hello" > ./redis-probe-linux
+            - chmod 755 ./redis-probe-linux
+            - cat .redis-probe-linux
             - ls -la workspace
-            - ls -la output  
+          onComplete:
+            - pwd
+            - ls -la
 
 
       - name: docker_push
