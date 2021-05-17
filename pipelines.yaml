@@ -7,6 +7,11 @@ resources:
     branches:
       include: master
 
+- name: rp_go_buildinfo
+  type: BuildInfo
+  configuration:
+    sourceArtifactory: artifactorylucianos
+
 - name: rpImage
   type: Image
   configuration:
@@ -34,6 +39,36 @@ pipelines:
 
   - name: redis_probe_pipeline
     steps:
+
+      - name: build_go
+        type: GoBuild
+        configuration:
+          sourceLocation: .
+          resolverRepo: default-go
+          noRegistry: true
+          inputResources:
+            - name: rpGitRepo
+          integrations:
+            - name: artifactorylucianos
+
+      - name: publish_go_binary
+        type: GoPublishBinary
+        configuration:
+          inputSteps:
+            - name: build_go
+          targetRepository: default-go-local
+          integrations:
+            - name: artifactorylucianos
+
+      # Publish the Go sample app build info. Docs at https://www.jfrog.com/confluence/display/JFROG/PublishBuildInfo
+      - name: publish_go_build
+        type: PublishBuildInfo
+        configuration:
+          inputSteps:
+            - name: publish_go_binary
+          outputResources:
+            - name: rp_go_buildinfo
+
       - name: docker_build
         type: DockerBuild
         configuration:
@@ -44,6 +79,8 @@ pipelines:
           dockerImageTag: ${run_number}
           inputResources:
             - name: rpGitRepo
+          inputSteps:
+            - name: publish_go_build
           integrations:
             - name: artifactorylucianos
         execution:
@@ -52,7 +89,7 @@ pipelines:
             - echo "echo Hello" > ./redis-probe-linux
             - chmod 755 ./redis-probe-linux
             - cat ./redis-probe-linux
-            - ls -la workspace
+            - ls -la 
           onComplete:
             - pwd
             - ls -la
