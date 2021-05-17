@@ -88,7 +88,7 @@ pipelines:
       - name: step_1
         type: Bash
         configuration:
-          inputResources:
+          inputSteps:
             - name: docker_push
         execution:
           onStart:
