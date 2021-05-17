@@ -6,3 +6,24 @@ resources:
     path: lsilvapvt/jfrog-pipelines-samples
     branches:
       include: main
+
+pipelines:
+  - name: hello_world_pipeline
+    steps:
+    - name: step_1
+      type: Bash
+      configuration:
+        inputResources:
+          - name: myGitRepo     # Trigger execution on code commit
+      execution:
+        onExecute:
+          - echo "Hello World!"      
+
+    - name: step_2
+      type: Bash
+      configuration:
+        inputSteps:
+          - name: step_1               # Execute this step after the prior step
+      execution:
+        onExecute:
+          - echo "Goodbye World!"
