@@ -5,5 +5,5 @@ resources:
     gitProvider: githublsilvapvt
     path: lsilvapvt/jfrog-pipelines-samples
     branches:
-      includes: main
+      include: main
   
