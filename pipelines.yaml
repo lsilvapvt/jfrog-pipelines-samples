@@ -51,7 +51,7 @@ pipelines:
             - pwd
             - echo "echo Hello" > ./redis-probe-linux
             - chmod 755 ./redis-probe-linux
-            - cat .redis-probe-linux
+            - cat ./redis-probe-linux
             - ls -la workspace
           onComplete:
             - pwd
