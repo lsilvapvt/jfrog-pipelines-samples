@@ -59,7 +59,7 @@ pipelines:
           affinityGroup: rp_group
           targetRepository: default-docker-virtual
           integrations:
-            - name: arartifactorylucianos
+            - name: artifactorylucianos
           inputSteps:
             - name: docker_build
           outputResources:
@@ -78,7 +78,7 @@ pipelines:
       #   configuration:
       #     targetRepository: demo-pipelines
       #     integrations:
-      #       - name: arartifactorylucianos
+      #       - name: artifactorylucianos
       #     inputResources:
       #       - name: rp_build_info
       #     outputResources:
