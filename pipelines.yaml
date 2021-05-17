@@ -6,4 +6,3 @@ resources:
     path: lsilvapvt/jfrog-pipelines-samples
     branches:
       include: main
-  
