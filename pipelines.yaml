@@ -48,9 +48,11 @@ pipelines:
             - name: artifactorylucianos
         execution:
           onStart:
-            - echo "echo Hello" > ./docker/redis-probe-linux
-            - chmod 755 ./docker/redis-probe-linux
-            - cat ./docker/redis-probe-linux
+            - ls -la 
+            - pwd
+            # echo "echo Hello" > ./docker/redis-probe-linux
+            # - chmod 755 ./docker/redis-probe-linux
+            # - cat ./docker/redis-probe-linux
 
 
       - name: docker_push
