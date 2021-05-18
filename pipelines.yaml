@@ -93,7 +93,6 @@ pipelines:
             - ls -la ..
             - ls -la ../..
 
-
       - name: docker_push
         type: DockerPush
         configuration:
