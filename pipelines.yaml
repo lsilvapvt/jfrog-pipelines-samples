@@ -51,6 +51,7 @@ pipelines:
             - name: rpGitRepo
           integrations:
             - name: artifactorylucianos
+        execution:
           onComplete:
            - add_run_files myfile redis-probe-linux  
 
