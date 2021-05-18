@@ -39,7 +39,7 @@ pipelines:
 
   - name: redis_probe_pipeline
     steps:
-      - name: redis-probe
+      - name: redis_probe
         type: GoBuild
         configuration:
           sourceLocation: src/.
@@ -54,7 +54,7 @@ pipelines:
         type: GoPublishBinary
         configuration:
           inputSteps:
-            - name: redis-probe
+            - name: redis_probe
           targetRepository: default-go-local
           integrations:
             - name: artifactorylucianos
