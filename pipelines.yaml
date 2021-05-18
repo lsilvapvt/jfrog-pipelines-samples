@@ -53,7 +53,7 @@ pipelines:
             - name: artifactorylucianos
         execution:
           onComplete:
-           - add_run_files myfile ${step_output_dir}/redis-probe-linux  
+           - add_run_files ${step_output_dir}/redis-probe-linux myfile 
            - ls -la $step_output_dir
 
       - name: publish_go_binary
@@ -92,6 +92,7 @@ pipelines:
           onStart:
             - pwd
             - ls -la 
+            - ls -la output
             - env
             - find .
             - restore_run_files myfile ${res_rpGitRepo_resourcePath}/docker/redis-probe-linux
