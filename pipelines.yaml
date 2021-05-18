@@ -43,7 +43,7 @@ pipelines:
         type: GoBuild
         configuration:
           sourceLocation: src/.
-          outputLocation: .
+          # outputLocation: .
           outputFile: redis-probe-linux
           resolverRepo: default-go
           noRegistry: true
@@ -53,7 +53,8 @@ pipelines:
             - name: artifactorylucianos
         execution:
           onComplete:
-           - add_run_files myfile redis-probe-linux  
+           - add_run_files myfile ${step_output_dir}/redis-probe-linux  
+           - ls -la $step_output_dir
 
       - name: publish_go_binary
         type: GoPublishBinary
