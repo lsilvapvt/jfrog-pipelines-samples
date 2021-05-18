@@ -78,17 +78,17 @@ pipelines:
           dockerImageTag: ${run_number}
           inputResources:
             - name: rpGitRepo
-            - name: rp_go_buildinfo
           inputSteps:
-            - name: publish_go_build
+            - name: redis_probe
           integrations:
             - name: artifactorylucianos
         execution:
           onStart:
             - pwd
             - ls -la 
-            - ls -la dependencyState/resources/rp_go_buildinfo/.
             - env
+            - find .
+            # res_rp_go_buildinfo_resourcePath
           onComplete:
             - pwd
             - ls -la ..
