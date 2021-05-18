@@ -51,11 +51,9 @@ pipelines:
             - name: rpGitRepo
           integrations:
             - name: artifactorylucianos
-        execution:
-          onComplete:
-          #  - add_run_files ${step_output_dir}/redis-probe-linux myfile 
-           - ls -la $step_output_dir
-           - env
+        # execution:
+        #   onComplete:
+        #     - add_run_files ${step_output_dir}/redis-probe-linux myfile 
 
       - name: publish_go_binary
         type: GoPublishBinary
@@ -91,20 +89,10 @@ pipelines:
             - name: artifactorylucianos
         execution:
           onStart:
-            - pwd
-            - ls -la 
-            - ls -la output
-            - env
-            - find .
             - restore_run_files output ${res_rpGitRepo_resourcePath}/go-output
-            - ls -la ${res_rpGitRepo_resourcePath}/go-output
+            # - ls -la ${res_rpGitRepo_resourcePath}/go-output
             - cp ${res_rpGitRepo_resourcePath}/go-output/redis-probe-linux ${res_rpGitRepo_resourcePath}/docker/.
-            - ls -la ${res_rpGitRepo_resourcePath}/docker
-          onComplete:
-            - pwd
-            - ls -la ..
-            - ls -la ../..
-
+            # - ls -la ${res_rpGitRepo_resourcePath}/docker
       - name: docker_push
         type: DockerPush
         configuration:
@@ -137,36 +125,19 @@ pipelines:
       #       - name: rp_promoted_build_info
 
 
-      - name: step_1
-        type: Bash
-        configuration:
-          inputSteps:
-            - name: docker_push
-        execution:
-          onStart:
-            - echo "prepare for main execution"
-          onExecute:
-            - echo "Hello World!"      
-          onSuccess:
-            - echo "Job well done!"
-          onFailure:
-            - echo "uh oh, something went wrong"
-          onComplete:
-            - echo "Cleaning up some stuff"
-
-      - name: step_2
-        type: Bash
-        configuration:
-          inputSteps:
-            - name: step_1               # Execute this step after the prior step
-        execution:
-          onStart:
-            - echo "Getting onStart done"
-          onExecute:
-            - echo "Goodbye World!"
-          onSuccess:
-            - echo "Doing onSuccess!"
-          onFailure:
-            - echo "uh oh, something went wrong"
-          onComplete:
-            - echo "Doing the onComplete stuff."
+      # - name: step_1
+      #   type: Bash
+      #   configuration:
+      #     inputSteps:
+      #       - name: docker_push
+      #   execution:
+      #     onStart:
+      #       - echo "prepare for main execution"
+      #     onExecute:
+      #       - echo "Hello World!"      
+      #     onSuccess:
+      #       - echo "Job well done!"
+      #     onFailure:
+      #       - echo "uh oh, something went wrong"
+      #     onComplete:
+      #       - echo "Cleaning up some stuff"
