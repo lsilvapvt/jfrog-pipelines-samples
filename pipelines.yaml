@@ -86,13 +86,12 @@ pipelines:
         execution:
           onStart:
             - pwd
-            - echo "echo Hello" > ./redis-probe-linux
-            - chmod 755 ./redis-probe-linux
-            - cat ./redis-probe-linux
             - ls -la 
+            - ls -la dependencyState/resources/.
           onComplete:
             - pwd
-            - ls -la
+            - ls -la ..
+            - ls -la ../..
 
 
       - name: docker_push
