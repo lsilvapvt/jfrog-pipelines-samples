@@ -87,7 +87,8 @@ pipelines:
           onStart:
             - pwd
             - ls -la 
-            - ls -la dependencyState/resources/.
+            - ls -la dependencyState/resources/rp_go_buildinfo/.
+            - env
           onComplete:
             - pwd
             - ls -la ..
