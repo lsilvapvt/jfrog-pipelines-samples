@@ -43,12 +43,16 @@ pipelines:
         type: GoBuild
         configuration:
           sourceLocation: src/.
+          outputLocation: .
+          outputFile: redis-probe-linux
           resolverRepo: default-go
           noRegistry: true
           inputResources:
             - name: rpGitRepo
           integrations:
             - name: artifactorylucianos
+          onComplete:
+           - add_run_files myfile redis-probe-linux  
 
       - name: publish_go_binary
         type: GoPublishBinary
@@ -79,7 +83,7 @@ pipelines:
           inputResources:
             - name: rpGitRepo
           inputSteps:
-            - name: redis_probe
+            - name: publish_go_build
           integrations:
             - name: artifactorylucianos
         execution:
@@ -88,7 +92,8 @@ pipelines:
             - ls -la 
             - env
             - find .
-            # res_rp_go_buildinfo_resourcePath
+            - restore_run_files myfile ${res_rpGitRepo_resourcePath}/docker/redis-probe-linux
+            - ls -la ${res_rpGitRepo_resourcePath}/docker
           onComplete:
             - pwd
             - ls -la ..
