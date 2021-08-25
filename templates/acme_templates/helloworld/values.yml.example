@@ -1,5 +1,5 @@
 myRepo:
-  gitProvider: acme_co_github
+  gitProvider: acme_github_readonly
   path: lsilvapvt/jfrog-pipelines-samples
 
 myPipeline:
