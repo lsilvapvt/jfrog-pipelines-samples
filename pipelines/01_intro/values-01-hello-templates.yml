@@ -2,3 +2,5 @@ myRepo:
   gitProvider: acme_co_github
   path: lsilvapvt/jfrog-pipelines-samples
 
+myPipeline:
+  name: acme_co_hello_from_template
