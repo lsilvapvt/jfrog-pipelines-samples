@@ -1,0 +1,77 @@
+resources:
+  - name: my_git_repository
+    type: GitRepo
+    configuration:
+      gitProvider: acme_co_github
+      path: lsilvapvt/jfrog-pipelines-samples
+      branches:
+        include: main
+
+  - name: myPropertyBag
+    type: PropertyBag
+    configuration:
+      commitSha: 1
+      runID: 1
+
+pipelines:
+  - name: acme_co_01_hello_world
+    steps:
+      - name: Step1
+        type: Bash
+        configuration:
+          inputResources:
+            # Sets up step to be triggered when there are commit events to myFirstRepo
+            - name: my_git_repository
+        execution:
+          onExecute:
+            - echo "Hello JFrog Pipelines!"
+            # Data from input resources is available as env variables in the step
+            - echo $res_my_git_repository_commitSha
+            # The next two commands add variables to run state, which is available to all downstream steps in this run
+            # Run state documentation: https://www.jfrog.com/confluence/display/JFROG/Creating+Stateful+Pipelines#CreatingStatefulPipelines-RunState
+            - add_run_variables current_runid=$run_id
+            - add_run_variables commitSha=$res_my_git_repository_commitSha
+            # This variable is written to pipeline state in Step3.
+            # So this will be empty during first run and will be set to prior run number in subsequent runs
+            # Pipeline state documentation: https://www.jfrog.com/confluence/display/JFROG/Creating+Stateful+Pipelines#CreatingStatefulPipelines-PipelineState
+            - echo "Previous run ID is $prev_runid"
+
+      - name: Step2
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: Step1
+        execution:
+          onExecute:
+            # Demonstrates the availability of an env variable written to run state during Step1
+            - echo $current_runid
+
+      - name: Step3
+        type: Bash
+        configuration:
+          inputSteps:
+            - name: Step2
+          outputResources:
+            - name: myPropertyBag
+        execution:
+          onExecute:
+            - echo $current_runid
+            # Writes current run number to pipeline state
+            - add_pipeline_variables prev_runid=$run_id
+            # Uses an utility function to update the output resource with the commitSha that triggered this run
+            # Dependent pipelines can be configured to trigger when this resource is updated
+            # Utility functions documentation: https://www.jfrog.com/confluence/display/JFROG/Pipelines+Utility+Functions
+            - write_output myPropertyBag commitSha=$commitSha runID=$current_runid
+
+  - name: acme_co_01_inspect_properties
+    steps:
+      - name: PropertiesUpdated
+        type: Bash
+        configuration:
+          inputResources:
+            # Sets up step to be triggered when myPropertyBag is updated
+            - name: myPropertyBag
+        execution:
+          onExecute:
+            # Retrieves the commitSha from input resource
+            - echo "CommitSha is $res_myPropertyBag_commitSha"
