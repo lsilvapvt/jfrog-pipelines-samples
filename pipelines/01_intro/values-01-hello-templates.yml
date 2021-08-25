@@ -1,0 +1,4 @@
+myRepo:
+  gitProvider: acme_co_github
+  path: lsilvapvt/jfrog-pipelines-samples
+
