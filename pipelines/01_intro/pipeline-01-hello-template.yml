@@ -1,23 +1,17 @@
 template: true   # required for local templates
-valuesFilePath: ./values.yml
+valuesFilePath: ./values-01-hello-templates.yml
 
 resources:
   - name: my_git_repository
     type: GitRepo
     configuration:
       gitProvider: {{ .Values.myRepo.gitProvider }}
-      path: lsilvapvt/jfrog-pipelines-samples
+      path: {{ .Values.myRepo.path }}
       branches:
         include: main
 
-  - name: myPropertyBag
-    type: PropertyBag
-    configuration:
-      commitSha: 1
-      runID: 1
-
 pipelines:
-  - name: acme_co_01_hello_world
+  - name: acme_co_01_hello_template
     steps:
       - name: Step1
         type: Bash
@@ -48,33 +42,3 @@ pipelines:
           onExecute:
             # Demonstrates the availability of an env variable written to run state during Step1
             - echo $current_runid
-
-      - name: Step3
-        type: Bash
-        configuration:
-          inputSteps:
-            - name: Step2
-          outputResources:
-            - name: myPropertyBag
-        execution:
-          onExecute:
-            - echo $current_runid
-            # Writes current run number to pipeline state
-            - add_pipeline_variables prev_runid=$run_id
-            # Uses an utility function to update the output resource with the commitSha that triggered this run
-            # Dependent pipelines can be configured to trigger when this resource is updated
-            # Utility functions documentation: https://www.jfrog.com/confluence/display/JFROG/Pipelines+Utility+Functions
-            - write_output myPropertyBag commitSha=$commitSha runID=$current_runid
-
-  - name: acme_co_01_inspect_properties
-    steps:
-      - name: PropertiesUpdated
-        type: Bash
-        configuration:
-          inputResources:
-            # Sets up step to be triggered when myPropertyBag is updated
-            - name: myPropertyBag
-        execution:
-          onExecute:
-            # Retrieves the commitSha from input resource
-            - echo "CommitSha is $res_myPropertyBag_commitSha"
