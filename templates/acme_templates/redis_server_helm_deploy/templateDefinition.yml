@@ -36,7 +36,6 @@ pipelines:
       - name: helm_deploy
         type: HelmDeploy
         configuration:
-          chartPath: .
           helmVersion: 3
           releaseName: {{ .Values.myHelmChart.releaseName }} 
           dryRun: true
