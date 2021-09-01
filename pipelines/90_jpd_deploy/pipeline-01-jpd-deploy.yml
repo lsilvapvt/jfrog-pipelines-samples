@@ -2,13 +2,14 @@ resources:
   - name: my_git_repository
     type: GitRepo
     configuration:
-      gitProvider: {{ .Values.myRepo.gitProvider }}
-      path: {{ .Values.myRepo.path }}
+      gitProvider: acme_co_github
+      path: lsilvapvt/jfrog-pipelines-samples
       branches:
         include: main
 
+
 pipelines:
-  - name: {{ .Values.myPipeline.name }}
+  - name: acme_co_01_hello_world
     steps:
       - name: Step1
         type: Bash
@@ -19,16 +20,9 @@ pipelines:
         execution:
           onExecute:
             - echo "Hello JFrog Pipelines!"
-            # Data from input resources is available as env variables in the step
             - echo $res_my_git_repository_commitSha
-            # The next two commands add variables to run state, which is available to all downstream steps in this run
-            # Run state documentation: https://www.jfrog.com/confluence/display/JFROG/Creating+Stateful+Pipelines#CreatingStatefulPipelines-RunState
             - add_run_variables current_runid=$run_id
             - add_run_variables commitSha=$res_my_git_repository_commitSha
-            # This variable is written to pipeline state in Step3.
-            # So this will be empty during first run and will be set to prior run number in subsequent runs
-            # Pipeline state documentation: https://www.jfrog.com/confluence/display/JFROG/Creating+Stateful+Pipelines#CreatingStatefulPipelines-PipelineState
-            - echo "Previous run ID is $prev_runid"
 
       - name: Step2
         type: Bash
@@ -39,3 +33,4 @@ pipelines:
           onExecute:
             # Demonstrates the availability of an env variable written to run state during Step1
             - echo $current_runid
+

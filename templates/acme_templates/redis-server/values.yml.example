@@ -1,0 +1,21 @@
+myRepo:
+  gitProvider: acme_co_github
+  path: lsilvapvt/jfrog-pipelines-samples
+  branch: main 
+
+myPipeline:
+  name: acme_co_redis_server_deploy_01
+
+myHelmChart:
+  artifactoryProvider: acme_co_artifactory
+  repository: acme-helm-bitnami-remote
+  releaseName: redis-server-01
+  chartName: redis
+  chartVersion: "15.3.0"  
+  namespace: redis-server-01 
+
+myKubernetes:
+  integrationName: acme_co_aks
+
+myGenericIntegration:
+  integrationName: acme_co_redis_test

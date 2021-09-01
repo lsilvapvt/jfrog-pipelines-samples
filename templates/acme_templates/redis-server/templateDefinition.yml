@@ -1,0 +1,54 @@
+resources:
+  - name: my_git_repository
+    type: GitRepo
+    configuration:
+      gitProvider: {{ .Values.myRepo.gitProvider }}
+      path: {{ .Values.myRepo.path }}
+      branches:
+        include: {{ .Values.myRepo.branch }}
+
+  - name: my_helm_chart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: {{ .Values.myHelmChart.artifactoryProvider }}
+      repository: {{ .Values.myHelmChart.repository }}
+      chart: {{ .Values.myHelmChart.chartName }}
+      version: {{ .Values.myHelmChart.chartVersion }}
+
+pipelines:
+  - name: {{ .Values.myPipeline.name }}
+    steps:
+      - name: pre_helm_deploy
+        type: Bash
+        configuration:
+          inputResources:
+            - name: my_git_repository
+              trigger: false
+        execution:
+          onExecute:
+            - echo "Hello JFrog Pipelines!"
+            - echo $res_my_git_repository_commitSha
+            - add_run_variables current_runid=$run_id
+            - add_run_variables commitSha=$res_my_git_repository_commitSha
+            - echo "Previous run ID is $prev_runid"
+            - echo $res_my_git_repository_resourcePath
+
+      - name: helm_deploy
+        type: HelmDeploy
+        configuration:
+          helmVersion: 3
+          releaseName: {{ .Values.myHelmChart.releaseName }} 
+          dryRun: true
+          valueFilePaths:
+            - ${res_my_git_repository_resourcePath}/templates/acme_templates/redis-server/deploy-values.yml
+          environmentVariables:
+            HELM_NAMESPACE: {{ .Values.myHelmChart.namespace }}          
+            REDIS_SERVER_PASSWORD: {{ .Values.myHelmChart.namespace }}_REDIS_PASSWORD
+          integrations:
+            - name: {{ .Values.myKubernetes.integrationName }}
+            - name: {{ .Values.myGenericIntegration.integrationName }}
+          inputResources:
+            - name: my_helm_chart
+            - name: my_git_repository
+          inputSteps:
+            - name: pre_helm_deploy
