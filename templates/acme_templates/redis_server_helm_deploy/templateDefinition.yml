@@ -36,6 +36,7 @@ pipelines:
       - name: helm_deploy
         type: HelmDeploy
         configuration:
+          chartPath: .
           helmVersion: 3
           releaseName: {{ .Values.myHelmChart.releaseName }} 
           dryRun: true
@@ -49,6 +50,5 @@ pipelines:
             - name: {{ .Values.myGenericIntegration.integrationName }}
           inputResources:
             - name: my_helm_chart
-            - name: my_git_repository
           inputSteps:
             - name: pre_helm_deploy
