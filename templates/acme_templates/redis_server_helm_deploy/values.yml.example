@@ -13,6 +13,7 @@ myHelmChart:
   chartName: redis
   chartVersion: "15.3.0"  
   namespace: redis-server-01 
+  flags: " --set master.service.type='LoadBalancer' "
 
 myKubernetes:
   integrationName: acme_co_aks

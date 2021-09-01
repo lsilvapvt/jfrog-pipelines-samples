@@ -1,4 +1,0 @@
-service:
-  type: LoadBalancer
-auth:
-  password: ${REDIS_SERVER_PASSWORD}

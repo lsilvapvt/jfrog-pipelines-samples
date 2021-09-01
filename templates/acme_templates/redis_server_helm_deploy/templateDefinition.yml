@@ -39,8 +39,7 @@ pipelines:
           helmVersion: 3
           releaseName: {{ .Values.myHelmChart.releaseName }} 
           dryRun: true
-          valueFilePaths:
-            - ${res_my_git_repository_resourcePath}/templates/acme_templates/redis-server/deploy-values.yml
+          flags: "{{ .Values.myHelmChart.flags }}"
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.myHelmChart.namespace }}          
             REDIS_SERVER_PASSWORD: {{ .Values.myHelmChart.namespace }}_REDIS_PASSWORD
