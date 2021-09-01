@@ -42,7 +42,6 @@ pipelines:
           flags: "{{ .Values.myHelmChart.flags }}"
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.myHelmChart.namespace }}          
-            REDIS_SERVER_PASSWORD: {{ .Values.myHelmChart.namespace }}_REDIS_PASSWORD
           integrations:
             - name: {{ .Values.myKubernetes.integrationName }}
             - name: {{ .Values.myGenericIntegration.integrationName }}
